@@ -1,0 +1,136 @@
+﻿@model CodeReviewApp.Models.CodeReviewViewModel
+<style>
+     body {
+            background-color: #9cc193;
+            font-family: Arial, sans-serif;
+        }
+        .brtag{
+            gap: 2px;
+        }
+    .dropdown-container {
+            margin: 50px;
+        }
+        .dropdown-container label {
+            display: inline-block;
+            width: 200px;
+            font-size: 18px;
+        }
+        select {
+            padding: 5px;
+            border-radius: 10px;
+            font-size: 16px;
+            width: 300px;
+            background-color: #c8d1f3;
+            border: 3px solid #5c3083;
+        }
+         table {
+            margin-top: 20px;
+            width: 70%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th {
+            background-color: yellow;
+            font-weight: bold;
+        }
+        td {
+            background-color: #f08080;
+            padding: 10px;
+        }
+        .project-label{
+            margin-top: 100px;
+        }
+        .button{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 50px; 
+            border-radius: 5%; 
+            }
+            
+        
+</style>
+<body>
+<form method="post" action="/CodeReview/LoadCodeReviews">
+<div class="alignment">
+    <div class="project-label">
+        <label for="Project">Project:</label>
+        <select id="ProjectId" name="projectId">
+            @foreach (var project in Model.Projects)
+            {
+                <option value="@project.Id">@project.Name</option>
+            }
+        </select>
+    </div>
+    <br class="brtag">
+
+    <div class="requirement-label">
+        <label for="Requirement">Requirement:</label>
+        <select id="RequirementId" name="requirementId">
+            @foreach (var requirement in Model.Requirements)
+            {
+                <option value="@requirement.Id">@requirement.Name</option>
+            }
+        </select>
+    </div>
+</div>
+     
+    <input type="submit" class="button" value="Get Code Reviews" />
+</form>
+
+<!-- Display Code Reviews -->
+@if (Model.CodeReviews != null && Model.CodeReviews.Any())
+{
+    <table>
+        <thead>
+            <tr>
+                <th>Code Review Id</th>
+                <th>Review Comment</th>
+                <th>Developer Name</th>
+                <th>Reviewer Name</th>
+                 <th>Review Date</th>  
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var review in Model.CodeReviews)
+            {
+                <tr>
+                    <td>@review.codeReviewId</td>
+                     <td>
+                    <input type="text" id="reviewComment_@review.codeReviewId" value="@review.ReviewComment" />
+                </td>
+                    <td>@review.DeveloperName</td>
+                    <td>@review.ReviewerName</td>
+                   <td>@review.ReviewDate?.ToString("yyyy-MM-dd")</td>
+                     <td>
+                    <button onclick="updateReview(@review.codeReviewId)">Update</button>
+                </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    @* <p>No code reviews found for the selected project and requirement.</p>codereview *@
+}
+<script>
+    function updateReview(codeReviewId) {
+         var comment = document.getElementById('reviewComment_' + codeReviewId).value;
+            $.ajax({
+                async: true,
+                type: "POST",
+                url: "/CodeReview/UpdateReview",
+                data: { codeReviewId: codeReviewId, reviewComment: comment },
+                dataType: 'json',
+                success: function (data) {
+                    alert("Worked");
+                },
+                failure: function () { alert("fail"); }
+            });
+    }
+</script>
+</body>

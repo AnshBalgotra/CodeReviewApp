@@ -1,0 +1,24 @@
+CREATE TABLE Projects (
+    ProjectId INT PRIMARY KEY,
+    ProjectName VARCHAR(100) NOT NULL
+);
+
+-- Create Requirements table
+CREATE TABLE Requirements (
+    RequirementId INT PRIMARY KEY ,
+    ProjectId INT,
+    RequirementName VARCHAR(255) NOT NULL,
+    FOREIGN KEY (ProjectId) REFERENCES Projects(ProjectId)
+);
+
+-- Create CodeReviews table
+CREATE TABLE CodeReviews (
+    CodeReviewId INT PRIMARY KEY AUTO_INCREMENT,
+    ProjectId INT,
+    RequirementId INT,
+    ReviewComment VARCHAR(500),
+    DeveloperName VARCHAR(100),
+    ReviewerName VARCHAR(100),
+    FOREIGN KEY (ProjectId) REFERENCES Projects(ProjectId),
+    FOREIGN KEY (RequirementId) REFERENCES Requirements(RequirementId)
+);

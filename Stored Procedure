@@ -1,0 +1,33 @@
+CREATE PROCEDURE GetProjects()
+BEGIN
+    SELECT ProjectId, ProjectName FROM Projects;
+END;
+
+
+
+CREATE PROCEDURE GetRequirements()
+BEGIN
+    SELECT RequirementId, RequirementName FROM Requirements;
+END;
+
+
+
+CREATE PROCEDURE GetCodeReviews(IN selectedProjectId INT, IN selectedRequirementId INT)
+BEGIN
+    SELECT cr.CodeReviewId, cr.ReviewComment, cr.DeveloperName, cr.ReviewerName,
+           p.ProjectName, r.RequirementName
+    FROM CodeReviews cr
+    JOIN Projects p ON cr.ProjectId = p.ProjectId
+    JOIN Requirements r ON cr.RequirementId = r.RequirementId
+    WHERE cr.ProjectId = selectedProjectId AND cr.RequirementId = selectedRequirementId;
+END;
+
+CREATE PROCEDURE UpdateCodeReview(
+    IN p_CodeReviewId INT,
+    IN p_ReviewComment TEXT
+)
+BEGIN
+    UPDATE CodeReviews
+    SET ReviewComment = p_ReviewComment
+    WHERE CodeReviewId = p_CodeReviewId;
+END

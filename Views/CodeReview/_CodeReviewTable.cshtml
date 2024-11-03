@@ -1,0 +1,25 @@
+﻿@model List<CodeReviewApp.Models.CodeReview>
+
+<table>
+    <thead>
+        <tr>
+            <th>Project Name</th>
+            <th>Requirement Name</th>
+            <th>Review Comment</th>
+            <th>Developer Name</th>
+            <th>Reviewer Name</th>
+        </tr>
+    </thead>
+    <tbody>
+    @foreach (var review in Model)
+    {
+        <tr>
+            <td>@review.ProjectId</td> 
+            <td>@review.RequirementId</td> 
+            <td>@review.ReviewComment</td>
+            <td>@review.DeveloperName</td>
+            <td>@review.ReviewerName</td>
+        </tr>
+    }
+    </tbody>
+</table>
